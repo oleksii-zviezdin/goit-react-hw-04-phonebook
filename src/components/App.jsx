@@ -36,12 +36,16 @@ export const App = () => {
       setContacts(contactsFromLocalStorage);
     }
   }, []);
-  
+
   useEffect(() => {
-    if (contacts.length) {
-      localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-    }
+    contacts && localStorage.setItem(LS_KEY, JSON.stringify(contacts));
   }, [contacts]);
+
+  // useEffect(() => {
+  //   if (contacts.length) {
+  //     localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+  //   }
+  // }, [contacts]);
   
   const filteredContacts = getFilteredContacts();
   const contactsLength = contacts.length;
