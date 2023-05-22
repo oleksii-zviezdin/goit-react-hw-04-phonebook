@@ -1,7 +1,7 @@
 // import { Component } from 'react';
-import { ContactForm, ContactList, Notification, Filter } from './index'
-import { nanoid } from "nanoid";
-import { Container, FormTitle, ContnactsTitle } from "./App.styled";
+import { ContactForm, ContactList, Notification, Filter } from './index';
+import { nanoid } from 'nanoid';
+import { Container, FormTitle, ContnactsTitle } from './App.styled';
 import { useEffect, useState } from 'react';
 
 const LS_KEY = 'contact_list';
@@ -10,54 +10,71 @@ export const App = () => {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
 
-  const handleSubmit = (data) => {
-    const contact = { ...data, id: nanoid() };
-    setContacts(prevContacts => [...prevContacts, contact]);
-  }
-
-  const removeContact = (contactId) => {
-    setContacts(prevContacts => prevContacts.filter(contact => contact.id !== contactId));
-  }
-
-  const changeFilter = e => {
-    setFilter(e.currentTarget.value);
-  }
-
-  const getFilteredContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-  if (normalizedFilter && contacts.length !== 0) {
-    return contacts.filter(({ name }) => name && name.toLowerCase().includes(normalizedFilter));
-  }
-  };
-
   useEffect(() => {
     const contactsFromLocalStorage = JSON.parse(localStorage.getItem(LS_KEY));
+    console.log(contactsFromLocalStorage);
     if (contactsFromLocalStorage) {
       setContacts(contactsFromLocalStorage);
     }
   }, []);
-  
+
+  const handleSubmit = data => {
+    const contact = { ...data, id: nanoid() };
+    setContacts(prevContacts => [...prevContacts, contact]);
+  };
+
+  const removeContact = contactId => {
+    setContacts(prevContacts =>
+      prevContacts.filter(contact => contact.id !== contactId)
+    );
+  };
+
+  const changeFilter = e => {
+    setFilter(e.currentTarget.value);
+  };
+
+  const normalizedFilter = filter.toLowerCase();
+
+  console.log(contacts);
+
+  const filteredContacts = contacts.filter(({ inputName }) =>
+    inputName.toLowerCase().includes(normalizedFilter)
+  );
+
+  console.log(filteredContacts);
+
   useEffect(() => {
     if (contacts.length) {
       localStorage.setItem(LS_KEY, JSON.stringify(contacts));
     }
   }, [contacts]);
-  
-  const filteredContacts = getFilteredContacts();
+
+  // const filteredContacts = getFilteredContacts();
   const contactsLength = contacts.length;
-  console.log(contactsLength)
-  console.log(`its filter: ${filteredContacts}`)
+  console.log(contactsLength);
+  console.log(`its filter: ${filteredContacts}`);
 
   return (
     <Container>
       <FormTitle>Phonebook</FormTitle>
       <ContactForm onSubmit={handleSubmit} contacts={contacts} />
-      {contactsLength !== 0 && <Filter value={filter} changeFilter={changeFilter} />}
-      {contactsLength === 0 && <Notification message={"This is where your added contacts will be displayed"} />}
-      {contactsLength !== 0 && <>
-                                <ContnactsTitle>Contacts</ContnactsTitle>
-                                <ContactList contacts={filteredContacts || []} onRemoveContact={removeContact} />
-                              </>}
+      {contactsLength !== 0 && (
+        <Filter value={filter} changeFilter={changeFilter} />
+      )}
+      {contactsLength === 0 && (
+        <Notification
+          message={'This is where your added contacts will be displayed'}
+        />
+      )}
+      {contactsLength !== 0 && (
+        <>
+          <ContnactsTitle>Contacts</ContnactsTitle>
+          <ContactList
+            contacts={filteredContacts}
+            onRemoveContact={removeContact}
+          />
+        </>
+      )}
     </Container>
   );
 };
@@ -74,7 +91,7 @@ export const App = () => {
 //       setContacts([...contactsFromlocalStorage])
 //     }
 //   },[])
-  
+
 //   useEffect(() => {
 //       localStorage.setItem(LS_KEY, JSON.stringify(contacts));
 
@@ -127,7 +144,6 @@ export const App = () => {
 //     contacts: [],
 //     filter: ''
 //   }
-
 
 //   componentDidMount() {
 //     const contactsFromlocalStorage = JSON.parse(localStorage.getItem(LS_KEY));
