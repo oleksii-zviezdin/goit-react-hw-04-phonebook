@@ -5,13 +5,13 @@ import { ContnactsList } from "./ContactList.styled";
 export const ContactList = ({ contacts, onRemoveContact }) => {  
         return (
             <ContnactsList>
-                {contacts.map(({ name, id, number}) => {
+                {contacts.map(({inputName, id, inputNumber}) => {
                     return (
                         <ContactListItem
                             key={id}
                             id={id}
-                            name={name}
-                            tel={number}
+                            name={inputName}
+                            tel={inputNumber}
                             onRemoveContact={onRemoveContact}
                         />
                 )})}
@@ -23,9 +23,9 @@ ContactList.propTypes = {
     // contacts: PropTypes.string.isRequired,
     contacts: PropTypes.arrayOf(
         PropTypes.shape({
-        name: PropTypes.string.isRequired,
+        inputName: PropTypes.string.isRequired,
         id: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
+        inputNumber: PropTypes.string.isRequired,
     }).isRequired),
     onRemoveContact: PropTypes.func.isRequired,
 }

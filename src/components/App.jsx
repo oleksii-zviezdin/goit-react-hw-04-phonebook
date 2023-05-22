@@ -16,6 +16,7 @@ export const App = () => {
   }
 
   const removeContact = (contactId) => {
+    console.log(contactId)
     setContacts(prevContacts => prevContacts.filter(contact => contact.id !== contactId));
   }
 
@@ -25,8 +26,8 @@ export const App = () => {
 
   const getFilteredContacts = () => {
     const normalizedFilter = filter.toLowerCase();
-  if (normalizedFilter && contacts.length !== 0) {
-    return contacts.filter(({ name }) => name && name.toLowerCase().includes(normalizedFilter));
+  if (contacts.length !== 0) {
+    return contacts.filter(({ inputName }) => inputName && inputName.toLowerCase().includes(normalizedFilter));
   }
   };
 
@@ -37,15 +38,15 @@ export const App = () => {
     }
   }, []);
 
-  useEffect(() => {
-    contacts && localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-  }, [contacts]);
-
   // useEffect(() => {
-  //   if (contacts.length) {
-  //     localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-  //   }
+  //   contacts && localStorage.setItem(LS_KEY, JSON.stringify(contacts));
   // }, [contacts]);
+
+  useEffect(() => {
+    if (contacts.length) {
+      localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+    }
+  }, [contacts]);
   
   const filteredContacts = getFilteredContacts();
   const contactsLength = contacts.length;

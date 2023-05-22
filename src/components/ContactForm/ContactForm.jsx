@@ -97,7 +97,10 @@ export const ContactForm = ({ contacts, onSubmit }) => {
   };
 
   const handleAddContactSubmit = (e) => {
-      e.preventDefault();
+    e.preventDefault();
+    const destructurizationContact = [...contacts]
+    console.log(`Це в сабміті деструктуризовані контакти: ${destructurizationContact}`)
+    console.log(`Це в сабміті оригінальні контакти: ${destructurizationContact}`)
 
     const isIncludeContactName = contacts.find(({ name }) => name === inputName);
     const isIncludeContactNumber = contacts.find(({ number }) => number === inputNumber);
