@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 const LS_KEY = 'contact_list';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const initialValue = JSON.parse(localStorage.getItem(LS_KEY)) === false ? [] : JSON.parse(localStorage.getItem(LS_KEY));
+  const [contacts, setContacts] = useState(initialValue);
   const [filter, setFilter] = useState('');
 
   const handleSubmit = (data) => {
@@ -16,8 +17,7 @@ export const App = () => {
   }
 
   const removeContact = (contactId) => {
-    console.log(contactId)
-    setContacts(prevContacts => prevContacts.filter(contact => contact.id !== contactId));
+    setContacts( contacts => contacts.filter(({id}) => id !== contactId));
   }
 
   const changeFilter = e => {
@@ -38,20 +38,12 @@ export const App = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   contacts && localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-  // }, [contacts]);
-
   useEffect(() => {
-    if (contacts.length) {
       localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-    }
   }, [contacts]);
   
   const filteredContacts = getFilteredContacts();
   const contactsLength = contacts.length;
-  console.log(contactsLength)
-  console.log(`its filter: ${filteredContacts}`)
 
   return (
     <Container>
@@ -62,69 +54,13 @@ export const App = () => {
       {contactsLength !== 0 && <>
                                 <ContnactsTitle>Contacts</ContnactsTitle>
                                 <ContactList contacts={filteredContacts || []} onRemoveContact={removeContact} />
-                              </>}
+      </>}
     </Container>
   );
 };
 
 /*    * * *    */
-
-// export const App = () => {
-//   const [contacts, setContacts] = useState([]);
-//   const [filter, setFilter] = useState('');
-
-//   useEffect(() => {
-//     const contactsFromlocalStorage = JSON.parse(localStorage.getItem(LS_KEY));
-//     if (contactsFromlocalStorage) {
-//       setContacts([...contactsFromlocalStorage])
-//     }
-//   },[])
-  
-//   useEffect(() => {
-//       localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-
-//   },[contacts])
-
-//   const handleSubmit = (data) => {
-//     const contact = { ...data };
-//     contact.id = nanoid();
-//     setContacts(prevState => ([...prevState, contact]))
-//   }
-
-//   const removeContact = contactId => {
-//     setContacts(prevState =>  prevState.filter(contacts => contacts.id !== contactId))
-//   }
-
-//   const changeFilter = e => {
-//     setFilter(e.currentTarget.value)
-//   }
-
-//   const getFilteredContact = () => {
-//     const normailzedContacts = filter.toLowerCase();
-//     if (contacts.length !== 0) {
-//       return contacts.filter(({name}) => name.toLowerCase().includes(normailzedContacts))
-//     } else {
-//       return [];
-//     }
-//   }
-//   const contactsLength = contacts.length;
-//   console.log(getFilteredContact())
-
-//     return (
-//     <Container>
-//       <FormTitle>Phonebook</FormTitle>
-//       <ContactForm onSubmit={handleSubmit} contacts={contacts} />
-//       {contactsLength !== 0 && <Filter value={filter} changeFilter={changeFilter} />}
-//       {contactsLength === 0 && <Notification message={"This is where your added contacts will be displayed"} />}
-//       {contactsLength !== 0 && <>
-//                                 <ContnactsTitle>Contacts</ContnactsTitle>
-//                                 <ContactList contacts={getFilteredContact () || []} onRemoveContact={removeContact} />
-//                               </>}
-//     </Container>
-//   );
-// };
-
-/*    * * *    */
+// Код з класом
 
 // export class App extends Component {
 
